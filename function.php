@@ -33,45 +33,56 @@ EOO;
 
    return $form;
 }
-function getAllWorks(){
+function getAllWorks() {
     $dbh = connectDB();
+
     $worklist = $dbh->query('SELECT * from worklist')
         ->fetchAll(PDO::FETCH_ASSOC);
+
     $dbh = null;
+
     return $worklist;
 }
 
-function getWorkByid(int $id){
+function getWorkByid(int $id) {
     $dbh = connectDB();
+
     $query = "SELECT * FROM worklist  WHERE id = :id ;";
+
     $params = [
         ':id' => $id
     ];
+
     $stmt = $dbh->prepare($query);
     $stmt->execute($params);
+
     $singleWork = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $dbh = null;
+
     return $singleWork;
 }
 
-function addNewWork(){
-    if (isset($_POST['addWork'])){
+function addNewWork() {
+    if (isset($_POST['addWork'])) {
         $newWork = $_POST['work'];
+
         $dbh = connectDB();
         $query = "INSERT INTO worklist (work_name, work_status) VALUES (:name, :work_status);";
+
         $params = [
             ':name' => $newWork,
             ':work_status' => 0
         ];
+
         $stmt = $dbh->prepare($query);
         $stmt->execute($params);
+
         $dbh = null;
-        header("Location: index.php");
-        die();
-    }else{
-        header("Location: index.php");
-        die();
     }
+
+    header("Location: index.php");
+    die();
 }
 function updateWork(int $id, string $work){
         $dbh = connectDB();
